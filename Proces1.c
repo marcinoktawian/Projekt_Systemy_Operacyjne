@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct lista{
+typedef struct lista{                       //struktura z ciagiem znaków
     int index;
     char znak;
     struct lista *prev, *next;
@@ -12,7 +12,7 @@ typedef struct lista{
 ciag *head;
 ciag *tail;
 
-ciag* add(char litera,ciag *point){
+ciag* add(char litera,ciag *point){         //funkcja dodajaca do listy
     point=(ciag*)malloc(sizeof(ciag));
     point->znak=litera;
     if(head==NULL){
@@ -31,7 +31,7 @@ ciag* add(char litera,ciag *point){
     return head;
 }
 
-void save(ciag *point,char tablica[],int size){
+void save(ciag *point,char tablica[],int size){             //funckja zapisujaca liste do tablicy
     int lp=0;
     if(point==NULL){
         printf("PUSTA LISTA");
@@ -43,7 +43,7 @@ void save(ciag *point,char tablica[],int size){
     }
 }
 
-void usun(ciag *point){
+void usun(ciag *point){                                 //funkcja czyszczaca cala liste
     if(point!=NULL){
         usun(point->next);
         free(point);
@@ -87,20 +87,21 @@ int main(){
             //do{
                 printf("\nPodaj swoj tekst\n");
                 a = getchar();
-                while((a = getchar())!='\n' && a!=EOF){
+                while((a = getchar())!='\n' && a!=EOF){         //zapisuje dopoki nie ma znaku enteru
                     head=add(a,head);
                 }
-                int const index=tail->index+1;
+                int const index=tail->index+1; 
                 int i;
-                char tab[index];
+                char tab[index];                                //tworze tablice
                 save(head,tab,index);
                 for(i=0;i<index;i++){
-                    printf("%c\t",tab[i]);
+                    printf("%c",tab[i]);
                 }
-                if(head==tail && head->znak=='.'){
+                printf("\n");
+                if(head==tail && head->znak=='.'){              //jezeli wpiszesz tylko "." to konczy sie zapisywanie
                     break;
                 }else{
-                    usun(head);
+                    usun(head);                                 //jesli nie to czyscisz liste
                 }
         }
         else {
