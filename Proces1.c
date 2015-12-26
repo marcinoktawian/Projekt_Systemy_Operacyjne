@@ -1,12 +1,63 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
+#include <stdlib.h>
+
+typedef struct lista{
+    int index;
+    char znak;
+    struct lista *prev, *next;
+}ciag;
+
+ciag *head;
+ciag *tail;
+
+ciag* add(char litera,ciag *point){
+    point=(ciag*)malloc(sizeof(ciag));
+    point->znak=litera;
+    if(head==NULL){
+        point->index=0;
+        point->next=NULL;
+        point->prev=NULL;
+        head=point;
+        tail=head;
+    }else{
+        point->index=(tail->index+1);
+        point->next=NULL;
+        point->prev=tail;
+        tail->next=point;
+        tail=point;
+    }
+    return head;
+}
+
+void save(ciag *point,char tablica[],int size){
+    int lp=0;
+    if(point==NULL){
+        printf("PUSTA LISTA");
+    }else{
+        while(point!=NULL){
+            tablica[lp++]=point->znak;
+            point=point->next;
+        }
+    }
+}
+
+void usun(ciag *point){
+    if(point!=NULL){
+        usun(point->next);
+        free(point);
+        point=NULL;
+    }
+    head=NULL;
+    tail=NULL;
+}
+
 
 int main(){
     int choose,size=0;
     char a;
-    char *buf;
-
+    char *tab;
     for(;;) {
         printf("1. Wczytaj z pliku \n2. Wczytaj z stdin\n");
         scanf("%d", &choose);
@@ -33,17 +84,24 @@ int main(){
             break;
         }
         else if (choose == 2) {
-            buf=(char*)malloc(1*sizeof(char));
-
-            do{
-                a=getchar();
-                buf[size++]=a;
-                printf("%s", buf);
-            }while(a!='.');
-
-            free(buf);
-
-            break;
+            //do{
+                printf("\nPodaj swoj tekst\n");
+                a = getchar();
+                while((a = getchar())!='\n' && a!=EOF){
+                    head=add(a,head);
+                }
+                int const index=tail->index+1;
+                int i;
+                char tab[index];
+                save(head,tab,index);
+                for(i=0;i<index;i++){
+                    printf("%c\t",tab[i]);
+                }
+                if(head==tail && head->znak=='.'){
+                    break;
+                }else{
+                    usun(head);
+                }
         }
         else {
             printf("Jestes debilem\n");
